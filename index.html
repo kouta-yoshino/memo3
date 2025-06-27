@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>吉野メモ帳</title>
+  <style>
+    * { box-sizing: border-box; }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      --secondary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+      --premium-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.37);
+      --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.3);
+      --text-primary: #2c3e50;
+      --text-secondary: #7f8c8d;
+      --accent-gold: #ffd700;
+      --accent-purple: #9b59b6;
+      --accent-blue: #3498db;
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background: var(--premium-gradient);
+      background-size: 400% 400%;
+      color: var(--text-primary); 
+      transition: all 0.5s ease;
+      min-height: 100vh;
+      overflow-x: hidden;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .dark { 
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+      background-size: 400% 400%;
+      color: #f9f9f9; 
+    }
+    
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+    
+    .container { 
+      position: relative;
+      max-width: 1000px; 
+      margin: 2em auto; 
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 25px;
+      padding: 3em;
+      box-shadow: var(--shadow-heavy);
+      z-index: 2;
+    }
+    
+    .dark .container {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    h1 { 
+      text-align: center; 
+      margin-bottom: 2em;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 3.5em;
+      background: var(--gold-gradient);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .dark h1 {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .form-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      padding: 2.5em;
+      border-radius: 20px;
+      margin-bottom: 2em;
+      box-shadow: var(--shadow-light);
+      transition: all 0.3s ease;
+    }
+    
+    .form-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark .form-section {
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    textarea, input[type="text"] { 
+      width: 100%; 
+      font-size: 1.1em; 
+      margin-top: 0.8em; 
+      padding: 1.2em;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid transparent;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2), 0 8px 25px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .dark textarea, .dark input {
+      background: rgba(0, 0, 0, 0.6);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #f9f9f9;
+    }
+    
+    .dark textarea:focus, .dark input:focus {
+      border-color: var(--accent-gold);
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    textarea { 
+      height: 180px; 
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      margin-top: 1.5em;
+      justify-content: center;
+    }
+    
+    button { 
+      padding: 1em 2em; 
+      font-size: 1.1em; 
+      border: none; 
+      border-radius: 15px; 
+      cursor: pointer; 
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 600; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 0.8em;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+    }
+    
+    .btn-secondary {
+      background: var(--secondary-gradient);
+      color: white;
+      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-secondary:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+      color: white;
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(255, 107, 107, 0.6);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #51cf66, #40c057);
+      color: white;
+      box-shadow: 0 8px 25px rgba(81, 207, 102, 0.4);
+    }
+    
+    .btn-success:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(81, 207, 102, 0.6);
+    }
+    
+    .toggle-dark { 
+      float: right; 
+      background: var(--gold-gradient);
+      color: #333;
+      border-radius: 50px;
+      padding: 0.8em 1.5em;
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+    }
+    
+    .toggle-dark:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 15px 35px rgba(255, 215, 0, 0.6);
+    }
+    
+    .dark .toggle-dark {
+      background: linear-gradient(135deg, #f39c12, #e67e22);
+      color: white;
+    }
+    
+    .memo-list { 
+      margin-top: 3em; 
+    }
+    
+    .memo-item { 
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px; 
+      padding: 2em; 
+      margin-bottom: 2em; 
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      animation: slideInUp 0.6s ease-out;
+      box-shadow: var(--shadow-light);
+    }
+    
+    @keyframes slideInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(50px) scale(0.9); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+    
+    .memo-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary-gradient);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .memo-item:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .memo-item:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark .memo-item { 
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .memo-title { 
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; 
+      font-size: 1.5em; 
+      margin-bottom: 0.8em;
+      color: var(--text-primary);
+      background: var(--gold-gradient);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .dark .memo-title { 
+      color: #ecf0f1;
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .memo-date { 
+      font-size: 0.9em; 
+      color: var(--text-secondary); 
+      margin-bottom: 1em;
+      font-weight: 500;
+    }
+    
+    .dark .memo-date { color: #bbb; }
+    
+    .memo-tags {
+      margin-bottom: 1.5em;
+    }
+    
+    .tag {
+      display: inline-block;
+      background: var(--primary-gradient);
+      color: white;
+      padding: 0.4em 1em;
+      border-radius: 20px;
+      font-size: 0.85em;
+      margin-right: 0.8em;
+      margin-bottom: 0.5em;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .tag:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+    
+    .memo-content {
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+      font-size: 1.05em;
+    }
+    
+    .memo-actions {
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .search-box { 
+      margin-bottom: 2em; 
+      position: relative;
+    }
+    
+    .search-box input {
+      padding-left: 3.5em;
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      font-size: 1.1em;
+    }
+    
+    .dark .search-box input {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f9f9f9;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 1.2em;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-gold);
+      font-size: 1.3em;
+      z-index: 10;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5em;
+      font-size: 1em;
+      color: var(--text-secondary);
+    }
+    
+    .dark .stats { color: #aaa; }
+    
+    .word-count {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 0.6em 1.2em;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+      border: 1px solid var(--glass-border);
+      color: var(--accent-gold);
+    }
+    
+    .dark .word-count {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--accent-gold);
+    }
+    
+    .auto-save-indicator {
+      font-size: 0.9em;
+      color: #51cf66;
+      margin-left: 1em;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .category-filter {
+      margin-bottom: 1.5em;
+    }
+    
+    .category-filter select {
+      padding: 0.8em 1.2em;
+      border-radius: 15px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      font-size: 1em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .category-filter select {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f9f9f9;
+    }
+    
+    .category-filter select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    }
+    
+    .markdown-preview {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 1.5em;
+      margin-top: 1.5em;
+      display: none;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .dark .markdown-preview {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
+      color: var(--text-primary);
+      margin-top: 1.5em;
+      margin-bottom: 0.8em;
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .dark .markdown-preview h1, .dark .markdown-preview h2, .dark .markdown-preview h3 {
+      color: #ecf0f1;
+    }
+    
+    .markdown-preview code {
+      background: rgba(255, 215, 0, 0.1);
+      padding: 0.3em 0.6em;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      color: var(--accent-gold);
+    }
+    
+    .dark .markdown-preview code {
+      background: rgba(255, 215, 0, 0.2);
+    }
+    
+    .markdown-preview pre {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 1.2em;
+      border-radius: 10px;
+      overflow-x: auto;
+      border: 1px solid var(--glass-border);
+    }
+    
+    .dark .markdown-preview pre {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .import-section {
+      margin-top: 1.5em;
+      padding-top: 1.5em;
+      border-top: 1px solid var(--glass-border);
+    }
+    
+    .dark .import-section {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .file-input-label {
+      display: inline-block;
+      padding: 1em 2em;
+      background: var(--secondary-gradient);
+      color: white;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    }
+    
+    .file-input-label:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(79, 172, 254, 0.6);
+    }
+    
+    .status {
+      padding: 1em 1.5em;
+      border-radius: 15px;
+      margin-top: 1.5em;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      backdrop-filter: blur(15px);
+    }
+    
+    .status.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .status.success {
+      background: rgba(81, 207, 102, 0.2);
+      color: #51cf66;
+      border: 1px solid rgba(81, 207, 102, 0.3);
+    }
+    
+    .status.error {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+    
+    .dark .status.success {
+      background: rgba(81, 207, 102, 0.1);
+      border-color: rgba(81, 207, 102, 0.2);
+    }
+    
+    .dark .status.error {
+      background: rgba(255, 107, 107, 0.1);
+      border-color: rgba(255, 107, 107, 0.2);
+    }
+    
+    /* レスポンシブデザイン */
+    @media (max-width: 768px) {
+      .container {
+        margin: 1em;
+        padding: 2em;
+      }
+      
+      h1 {
+        font-size: 2.5em;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+      
+      .memo-actions {
+        flex-direction: column;
+      }
+      
+      .stats {
+        flex-direction: column;
+        gap: 1em;
+      }
+    }
+    
+    /* 特別なアニメーション効果 */
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .glow {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    
+    .dark .glow {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    
+    /* スマホ最適化・フッターメニュー・FAB */
+    @media (max-width: 600px) {
+      .container {
+        padding: 0.5em 0.2em;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .form-section, .memo-item, .markdown-preview {
+        padding: 1em;
+        border-radius: 10px;
+      }
+      h1 {
+        font-size: 1.5em;
+        margin-bottom: 1em;
+      }
+      .button-group, .memo-actions {
+        flex-direction: column;
+        gap: 0.5em;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 0.5em;
+      }
+      .memo-title {
+        font-size: 1.1em;
+      }
+      .memo-content {
+        font-size: 1em;
+      }
+      .search-box input, .category-filter select {
+        font-size: 1em;
+        padding: 0.8em;
+      }
+      .file-input-label {
+        width: 100%;
+        text-align: center;
+      }
+      .fab {
+        display: block;
+      }
+    }
+    .fab {
+      display: none;
+      position: fixed;
+      right: 1.5em;
+      bottom: 1.5em;
+      z-index: 100;
+      background: var(--gold-gradient);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 2em;
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .fab:active {
+      background: #ffd700;
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+    }
+    .footer-menu {
+      display: none;
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: var(--glass-bg);
+      border-top: 1px solid var(--glass-border);
+      z-index: 99;
+      padding: 0.5em 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    @media (max-width: 600px) {
+      .footer-menu {
+        display: flex;
+      }
+    }
+    .footer-menu button {
+      background: none;
+      border: none;
+      color: var(--accent-gold);
+      font-size: 1.5em;
+      padding: 0.5em 1em;
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .footer-menu button:active {
+      background: var(--glass-bg);
+    }
+    /* 色ラベル */
+    .color-label {
+      display: inline-block;
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 50%;
+      margin-right: 0.5em;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    .color-label.selected {
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 0 2px var(--accent-gold);
+    }
+    /* ピン留めアイコン */
+    .pin-btn {
+      background: none;
+      border: none;
+      font-size: 1.3em;
+      color: var(--accent-gold);
+      cursor: pointer;
+      margin-right: 0.5em;
+      vertical-align: middle;
+      transition: color 0.2s;
+    }
+    .pin-btn.pinned {
+      color: #e67e22;
+      text-shadow: 0 0 8px #ffd700;
+    }
+    /* 画像プレビュー */
+    .image-preview {
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 0.5em 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <h1 class="floating">📝 吉野メモ帳 <button class="toggle-dark glow" onclick="toggleDark()">🌙</button></h1>
+    
+    <div class="form-section">
+      <input type="text" id="title" placeholder="✨ タイトルを入力">
+      <input type="text" id="tags" placeholder="🏷️ タグ（カンマ区切り）例: 仕事, アイデア, 重要">
+      <textarea id="content" placeholder="✨ ここにメモを書いてください...&#10;&#10;📝 Markdown記法が使えます:&#10;# 見出し1&#10;## 見出し2&#10;**太字** *斜体*&#10;- リスト&#10;1. 番号付きリスト&#10;`コード`&#10;```&#10;コードブロック&#10;```"></textarea>
+      
+      <div class="stats">
+        <div class="word-count">📊 文字数: <span id="wordCount">0</span></div>
+        <div class="auto-save-indicator" id="autoSaveIndicator">💾 自動保存しました</div>
+      </div>
+      
+      <div class="button-group">
+        <button onclick="saveMemo()" id="saveBtn" class="btn-primary">💾 保存</button>
+        <button onclick="clearForm()" class="btn-secondary">🗑️ クリア</button>
+        <button onclick="togglePreview()" class="btn-secondary">👁️ プレビュー</button>
+        <button onclick="document.getElementById('fileInput').click()" class="btn-success">📁 インポート</button>
+        <button id="voiceBtn" type="button" class="btn-secondary" onclick="toggleVoiceInput()">🎤 音声入力</button>
+      </div>
+      
+      <div class="markdown-preview" id="markdownPreview"></div>
+      
+      <div class="import-section">
+        <input type="file" id="fileInput" class="file-input" accept=".txt,.md" onchange="importFile(event)">
+        <label for="fileInput" class="file-input-label">📁 ファイルからインポート</label>
+      </div>
+      
+      <div style="margin: 1em 0;">
+        <span>色ラベル:</span>
+        <span class="color-label" style="background:#ffd700" onclick="selectColor('#ffd700')"></span>
+        <span class="color-label" style="background:#4facfe" onclick="selectColor('#4facfe')"></span>
+        <span class="color-label" style="background:#51cf66" onclick="selectColor('#51cf66')"></span>
+        <span class="color-label" style="background:#ff6b6b" onclick="selectColor('#ff6b6b')"></span>
+        <span class="color-label" style="background:#9b59b6" onclick="selectColor('#9b59b6')"></span>
+        <input type="hidden" id="color" value="#ffd700">
+      </div>
+      <div style="margin: 1em 0;">
+        <label for="imageInput">画像添付:</label>
+        <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+        <img id="imagePreview" class="image-preview" style="display:none;" />
+      </div>
+    </div>
+    
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search" placeholder="🔎 メモを検索..." oninput="renderMemos()">
+    </div>
+    
+    <div class="category-filter">
+      <select id="categoryFilter" onchange="renderMemos()">
+        <option value="">📂 すべてのカテゴリ</option>
+      </select>
+    </div>
+    
+    <div class="status" id="status"></div>
+    
+    <div class="memo-list" id="memoList"></div>
+  </div>
+
+  <div class="footer-menu">
+    <button onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</button>
+    <button onclick="document.getElementById('title').focus()">📝</button>
+    <button onclick="document.getElementById('search').focus()">🔍</button>
+    <button onclick="document.getElementById('memoList').scrollIntoView({behavior:'smooth'})">📄</button>
+  </div>
+  <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">＋</button>
+
+  <script>
+    let editId = null;
+    let autoSaveTimer = null;
+    let allTags = new Set();
+    let recognizing = false;
+    let recognition = null;
+    
+    // パーティクル効果
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // メモの取得・保存
+    function getMemos() {
+      return JSON.parse(localStorage.getItem('memos') || '[]');
+    }
+    
+    function setMemos(memos) {
+      localStorage.setItem('memos', JSON.stringify(memos));
+    }
+    
+    // 自動保存機能
+    function setupAutoSave() {
+      const content = document.getElementById('content');
+      const title = document.getElementById('title');
+      const tags = document.getElementById('tags');
+      
+      [content, title, tags].forEach(element => {
+        element.addEventListener('input', () => {
+          clearTimeout(autoSaveTimer);
+          autoSaveTimer = setTimeout(() => {
+            if (content.value.trim() || title.value.trim()) {
+              autoSave();
+            }
+          }, 2000);
+        });
+      });
+    }
+    
+    function autoSave() {
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const tags = document.getElementById('tags').value.trim();
+      
+      if (!title && !content) return;
+      
+      let memos = getMemos();
+      const now = new Date();
+      
+      if (editId !== null) {
+        memos = memos.map(m => m.id === editId ? { ...m, title, content, tags, date: now.toLocaleString() } : m);
+      } else {
+        memos.unshift({ id: Date.now(), title, content, tags, date: now.toLocaleString() });
+      }
+      
+      setMemos(memos);
+      showAutoSaveIndicator();
+    }
+    
+    function showAutoSaveIndicator() {
+      const indicator = document.getElementById('autoSaveIndicator');
+      indicator.style.opacity = '1';
+      setTimeout(() => {
+        indicator.style.opacity = '0';
+      }, 2000);
+    }
+    
+    // メモの保存
+    function saveMemo() {
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const tags = document.getElementById('tags').value.trim();
+      
+      if (!title && !content) return;
+      
+      let memos = getMemos();
+      const now = new Date();
+      
+      if (editId !== null) {
+        memos = memos.map(m => m.id === editId ? { ...m, title, content, tags, date: now.toLocaleString() } : m);
+        editId = null;
+        document.getElementById('saveBtn').textContent = '💾 保存';
+        showStatus('✨ 編集しました！', 'success');
+      } else {
+        memos.unshift({ id: Date.now(), title, content, tags, date: now.toLocaleString() });
+        showStatus('✨ 保存しました！', 'success');
+      }
+      
+      setMemos(memos);
+      clearForm();
+      renderMemos();
+      updateTags();
+    }
+    
+    // フォームクリア
+    function clearForm() {
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      document.getElementById('tags').value = '';
+      editId = null;
+      document.getElementById('saveBtn').textContent = '💾 保存';
+      document.getElementById('markdownPreview').style.display = 'none';
+      updateWordCount();
+    }
+    
+    // メモの表示
+    function renderMemos() {
+      const list = document.getElementById('memoList');
+      const search = document.getElementById('search').value.trim().toLowerCase();
+      const categoryFilter = document.getElementById('categoryFilter').value;
+      
+      let memos = getMemos();
+      
+      // 検索フィルター
+      if (search) {
+        memos = memos.filter(m => 
+          (m.title + m.content + m.tags).toLowerCase().includes(search)
+        );
+      }
+      
+      // カテゴリフィルター
+      if (categoryFilter) {
+        memos = memos.filter(m => 
+          m.tags && m.tags.toLowerCase().includes(categoryFilter.toLowerCase())
+        );
+      }
+      
+      list.innerHTML = memos.map(m => `
+        <div class="memo-item">
+          <button class="pin-btn" onclick="togglePin(${m.id})" title="ピン留め">${m.pinned ? '📌' : '📍'}</button>
+          <div class="memo-title" style="${m.color ? `background:linear-gradient(90deg,${m.color},#fff3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;` : ''}">${escapeHTML(m.title)}</div>
+          <div class="memo-date">📅 ${m.date}</div>
+          ${m.tags ? `<div class="memo-tags">${m.tags.split(',').map(tag => 
+            `<span class="tag">${escapeHTML(tag.trim())}</span>`
+          ).join('')}</div>` : ''}
+          <div class="memo-content">${renderMarkdown(m.content)}</div>
+          <div class="memo-actions">
+            <button onclick="editMemo(${m.id})" class="btn-primary">✏️ 編集</button>
+            <button onclick="deleteMemo(${m.id})" class="btn-danger">🗑️ 削除</button>
+            <button onclick="exportMemo(${m.id})" class="btn-success">📤 エクスポート</button>
+            <button onclick="duplicateMemo(${m.id})" class="btn-secondary">📋 複製</button>
+          </div>
+        </div>
+      `).join('') || '<div style="text-align: center; color: #888; padding: 3em; font-size: 1.2em;">✨ メモがありません</div>';
+    }
+    
+    // メモの編集
+    function editMemo(id) {
+      const memos = getMemos();
+      const memo = memos.find(m => m.id === id);
+      if (!memo) return;
+      
+      document.getElementById('title').value = memo.title;
+      document.getElementById('content').value = memo.content;
+      document.getElementById('tags').value = memo.tags || '';
+      editId = id;
+      document.getElementById('saveBtn').textContent = '💾 編集保存';
+      updateWordCount();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // メモの削除
+    function deleteMemo(id) {
+      if (!confirm('本当に削除しますか？')) return;
+      
+      let memos = getMemos();
+      memos = memos.filter(m => m.id !== id);
+      setMemos(memos);
+      renderMemos();
+      updateTags();
+      showStatus('🗑️ 削除しました！', 'success');
+    }
+    
+    // メモの複製
+    function duplicateMemo(id) {
+      const memos = getMemos();
+      const memo = memos.find(m => m.id === id);
+      if (!memo) return;
+      
+      const newMemo = {
+        ...memo,
+        id: Date.now(),
+        title: memo.title + ' (コピー)',
+        date: new Date().toLocaleString()
+      };
+      
+      memos.unshift(newMemo);
+      setMemos(memos);
+      renderMemos();
+      showStatus('📋 メモを複製しました！', 'success');
+    }
+    
+    // メモのエクスポート
+    function exportMemo(id) {
+      const memos = getMemos();
+      const memo = memos.find(m => m.id === id);
+      if (!memo) return;
+      
+      const content = `タイトル: ${memo.title}
+日付: ${memo.date}
+タグ: ${memo.tags || 'なし'}
+
+${memo.content}`;
+      
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${memo.title || 'memo'}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showStatus('📤 エクスポートしました！', 'success');
+    }
+    
+    // ファイルインポート
+    function importFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        const lines = content.split('\n');
+        let title = '';
+        let tags = '';
+        let memoContent = '';
+        
+        // ファイルの内容を解析
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith('タイトル:')) {
+            title = line.replace('タイトル:', '').trim();
+          } else if (line.startsWith('タグ:')) {
+            tags = line.replace('タグ:', '').trim();
+          } else if (line.startsWith('日付:')) {
+            continue;
+          } else if (line === '') {
+            // 空行の後はメモ内容
+            memoContent = lines.slice(i + 1).join('\n');
+            break;
+          }
+        }
+        
+        // タイトルが見つからない場合はファイル名を使用
+        if (!title) {
+          title = file.name.replace(/\.[^/.]+$/, '');
+        }
+        
+        // メモ内容がない場合は全体を内容として扱う
+        if (!memoContent) {
+          memoContent = content;
+        }
+        
+        document.getElementById('title').value = title;
+        document.getElementById('content').value = memoContent;
+        document.getElementById('tags').value = tags;
+        updateWordCount();
+        
+        showStatus('📁 ファイルをインポートしました！', 'success');
+        event.target.value = ''; // ファイル入力をリセット
+      };
+      reader.readAsText(file);
+    }
+    
+    // マークダウンレンダリング
+    function renderMarkdown(text) {
+      if (!text) return '';
+      
+      return text
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`(.*?)`/g, '<code>$1</code>')
+        .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/^- (.*$)/gim, '<li>$1</li>')
+        .replace(/^(\d+)\. (.*$)/gim, '<li>$2</li>')
+        .replace(/\n/g, '<br>');
+    }
+    
+    // プレビューの切り替え
+    function togglePreview() {
+      const preview = document.getElementById('markdownPreview');
+      const content = document.getElementById('content').value;
+      
+      if (preview.style.display === 'none' || preview.style.display === '') {
+        preview.innerHTML = renderMarkdown(content);
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+    }
+    
+    // 文字数カウント
+    function updateWordCount() {
+      const content = document.getElementById('content').value;
+      const wordCount = content.length;
+      document.getElementById('wordCount').textContent = wordCount;
+    }
+    
+    // タグの更新
+    function updateTags() {
+      const memos = getMemos();
+      allTags.clear();
+      
+      memos.forEach(memo => {
+        if (memo.tags) {
+          memo.tags.split(',').forEach(tag => {
+            allTags.add(tag.trim());
+          });
+        }
+      });
+      
+      const categoryFilter = document.getElementById('categoryFilter');
+      const currentValue = categoryFilter.value;
+      
+      categoryFilter.innerHTML = '<option value="">📂 すべてのカテゴリ</option>';
+      Array.from(allTags).sort().forEach(tag => {
+        const option = document.createElement('option');
+        option.value = tag;
+        option.textContent = tag;
+        categoryFilter.appendChild(option);
+      });
+      
+      categoryFilter.value = currentValue;
+    }
+    
+    // ステータス表示
+    function showStatus(msg, type = 'success') {
+      const status = document.getElementById('status');
+      status.textContent = msg;
+      status.className = `status ${type} show`;
+      setTimeout(() => {
+        status.classList.remove('show');
+      }, 3000);
+    }
+    
+    // HTMLエスケープ
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'
+      }[tag]));
+    }
+    
+    // ダークモード切り替え
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const button = document.querySelector('.toggle-dark');
+      button.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+      localStorage.setItem('darkmode', document.body.classList.contains('dark'));
+    }
+    
+    // 初期化
+    window.onload = function() {
+      createParticles();
+      
+      if (localStorage.getItem('darkmode') === 'true') {
+        document.body.classList.add('dark');
+        document.querySelector('.toggle-dark').textContent = '☀️';
+      }
+      
+      setupAutoSave();
+      updateTags();
+      renderMemos();
+      
+      // 文字数カウントの初期化
+      const content = document.getElementById('content');
+      content.addEventListener('input', updateWordCount);
+      updateWordCount();
+    };
+    
+    function selectColor(color) {
+      document.getElementById('color').value = color;
+      document.querySelectorAll('.color-label').forEach(e=>e.classList.remove('selected'));
+      event.target.classList.add('selected');
+    }
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById('imagePreview');
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+    // ピン留め
+    function togglePin(id) {
+      let memos = getMemos();
+      memos = memos.map(m => m.id === id ? { ...m, pinned: !m.pinned } : m);
+      setMemos(memos);
+      renderMemos();
+    }
+
+    // 音声入力機能
+    function toggleVoiceInput() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showStatus('⚠️ このブラウザは音声認識に対応していません', 'error');
+        return;
+      }
+      if (!recognition) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ja-JP';
+        recognition.interimResults = true;
+        recognition.continuous = false;
+        recognition.onstart = function() {
+          recognizing = true;
+          const btn = document.getElementById('voiceBtn');
+          btn.textContent = '🛑 音声停止';
+          btn.classList.add('btn-danger');
+          btn.classList.remove('btn-secondary');
+          showStatus('🎤 音声認識中... 話しかけてください', 'success');
+        };
+        recognition.onend = function() {
+          recognizing = false;
+          const btn = document.getElementById('voiceBtn');
+          btn.textContent = '🎤 音声入力';
+          btn.classList.remove('btn-danger');
+          btn.classList.add('btn-secondary');
+        };
+        recognition.onerror = function(e) {
+          showStatus('⚠️ 音声認識エラー: ' + e.error, 'error');
+        };
+        recognition.onresult = function(e) {
+          let transcript = '';
+          for (let i = e.resultIndex; i < e.results.length; ++i) {
+            transcript += e.results[i][0].transcript;
+          }
+          if (transcript) {
+            const textarea = document.getElementById('content');
+            textarea.value += (textarea.value && !textarea.value.endsWith('\n') ? '\n' : '') + transcript;
+            updateWordCount();
+          }
+        };
+      }
+      if (recognizing) {
+        recognition.stop();
+      } else {
+        recognition.start();
+      }
+    }
+  </script>
+</body>
+</html>

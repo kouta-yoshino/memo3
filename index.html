@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -791,6 +791,337 @@
       margin: 0.5em 0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+    
+    /* 新機能のスタイル */
+    .feature-tabs {
+      display: flex;
+      gap: 0.5em;
+      margin-bottom: 1.5em;
+      flex-wrap: wrap;
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 0.5em;
+    }
+    
+    .tab-btn {
+      padding: 0.8em 1.5em;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      flex: 1;
+      min-width: 120px;
+    }
+    
+    .tab-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .dark .tab-btn {
+      color: #ccc;
+    }
+    
+    .dark .tab-btn.active {
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* リマインダー */
+    .reminder-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 1.5em;
+      margin-bottom: 1.5em;
+      border-left: 4px solid var(--accent-gold);
+    }
+    
+    .reminder-item {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      padding: 1em;
+      margin-bottom: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .reminder-overdue {
+      background: rgba(255, 107, 107, 0.1);
+      border-color: rgba(255, 107, 107, 0.3);
+    }
+    
+    /* テーマセレクター */
+    .theme-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1em;
+      margin: 1em 0;
+    }
+    
+    .theme-option {
+      border: 2px solid transparent;
+      border-radius: 15px;
+      padding: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .theme-option.selected {
+      border-color: var(--accent-gold);
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+    }
+    
+    .theme-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.8;
+      border-radius: 13px;
+    }
+    
+    .theme-option span {
+      position: relative;
+      z-index: 1;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+    
+    .theme-ocean::before { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .theme-sunset::before { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .theme-forest::before { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .theme-royal::before { background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%); }
+    .theme-minimal::before { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
+    .theme-dark::before { background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%); }
+    
+    /* 統計ダッシュボード */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+    
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 1.5em;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary-gradient);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: 900;
+      background: var(--gold-gradient);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    
+    .stat-label {
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-top: 0.5em;
+    }
+    
+    .chart-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 1.5em;
+      margin-bottom: 1.5em;
+    }
+    
+    /* 高度な検索 */
+    .advanced-search {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 1.5em;
+      margin-bottom: 1.5em;
+    }
+    
+    .search-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1em;
+      margin-top: 1em;
+    }
+    
+    .date-range {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+    }
+    
+    .date-range input {
+      padding: 0.8em;
+      border-radius: 10px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+    }
+    
+    .dark .date-range input {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f9f9f9;
+    }
+    
+    /* 暗号化機能 */
+    .encryption-section {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 215, 0, 0.1));
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      border-radius: 15px;
+      padding: 1.5em;
+      margin-bottom: 1.5em;
+    }
+    
+    .encryption-toggle {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 1em;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: #ccc;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .toggle-switch.active {
+      background: var(--accent-gold);
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(30px);
+    }
+    
+    .encrypted-indicator {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff6b6b, #ffd700);
+      color: white;
+      padding: 0.3em 0.8em;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: 600;
+      margin-left: 0.5em;
+    }
+    
+    /* 同期機能 */
+    .sync-section {
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
+      border: 1px solid rgba(79, 172, 254, 0.3);
+      border-radius: 15px;
+      padding: 1.5em;
+      margin-bottom: 1.5em;
+    }
+    
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 1em;
+    }
+    
+    .sync-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #51cf66;
+      animation: pulse 2s infinite;
+    }
+    
+    .sync-indicator.syncing {
+      background: #ffd700;
+      animation: spin 1s linear infinite;
+    }
+    
+    .sync-indicator.error {
+      background: #ff6b6b;
+      animation: none;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -799,6 +1130,17 @@
   <div class="container">
     <h1 class="floating">📝 吉野メモ帳 <button class="toggle-dark glow" onclick="toggleDark()">🌙</button></h1>
     
+    <!-- 新機能タブ -->
+    <div class="feature-tabs">
+      <button class="tab-btn active" onclick="switchTab('memo')">📝 メモ</button>
+      <button class="tab-btn" onclick="switchTab('stats')">📊 統計</button>
+      <button class="tab-btn" onclick="switchTab('reminders')">⏰ リマインダー</button>
+      <button class="tab-btn" onclick="switchTab('settings')">⚙️ 設定</button>
+      <button class="tab-btn" onclick="switchTab('sync')">☁️ 同期</button>
+    </div>
+
+    <!-- メモタブ -->
+    <div id="memo-tab" class="tab-content active">
     <div class="form-section">
       <input type="text" id="title" placeholder="✨ タイトルを入力">
       <input type="text" id="tags" placeholder="🏷️ タグ（カンマ区切り）例: 仕事, アイデア, 重要">
@@ -838,17 +1180,55 @@
         <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
         <img id="imagePreview" class="image-preview" style="display:none;" />
       </div>
+      
+      <!-- リマインダー設定 -->
+      <div style="margin: 1em 0;">
+        <label for="reminderDate">⏰ リマインダー設定:</label>
+        <input type="datetime-local" id="reminderDate" style="width: 100%; margin-top: 0.5em; padding: 0.8em; border-radius: 10px; background: var(--glass-bg); border: 1px solid var(--glass-border);">
+      </div>
+      
+      <!-- 暗号化オプション -->
+      <div class="encryption-toggle">
+        <span>🔒 暗号化:</span>
+        <div class="toggle-switch" id="encryptionToggle" onclick="toggleEncryption()">
+          <div class="toggle-slider"></div>
+        </div>
+        <input type="password" id="encryptionPassword" placeholder="パスワード（暗号化時のみ）" style="display: none; flex: 1; padding: 0.8em; border-radius: 10px; background: var(--glass-bg); border: 1px solid var(--glass-border);">
+      </div>
     </div>
     
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="search" placeholder="🔎 メモを検索..." oninput="renderMemos()">
-    </div>
-    
-    <div class="category-filter">
-      <select id="categoryFilter" onchange="renderMemos()">
-        <option value="">📂 すべてのカテゴリ</option>
-      </select>
+    <!-- 高度な検索 -->
+    <div class="advanced-search">
+      <h3>🔍 高度な検索</h3>
+      <div class="search-box" style="margin-bottom: 0;">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search" placeholder="🔎 メモを検索..." oninput="renderMemos()">
+      </div>
+      <div class="search-filters">
+        <div class="category-filter">
+          <select id="categoryFilter" onchange="renderMemos()">
+            <option value="">📂 すべてのカテゴリ</option>
+          </select>
+        </div>
+        <div class="date-range">
+          <label>📅 期間:</label>
+          <input type="date" id="dateFrom" onchange="renderMemos()">
+          <span>〜</span>
+          <input type="date" id="dateTo" onchange="renderMemos()">
+        </div>
+        <div>
+          <select id="sortBy" onchange="renderMemos()">
+            <option value="date">📅 日付順</option>
+            <option value="title">📝 タイトル順</option>
+            <option value="length">📏 文字数順</option>
+          </select>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" id="showPinnedOnly" onchange="renderMemos()"> 📌 ピン留めのみ
+          </label>
+        </div>
+      </div>
     </div>
     
     <div class="status" id="status"></div>
